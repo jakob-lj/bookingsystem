@@ -22,6 +22,7 @@ class Item(ItemBase):
 
 class UserBase(BaseModel):
     email: str
+    username: str
 
 
 class UserCreate(UserBase):
