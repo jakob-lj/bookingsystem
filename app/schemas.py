@@ -59,10 +59,16 @@ class FamilyMember(BaseModel):
     class Config:
         orm_mode = True
 
+class FamilyMemberOut(BaseModel):
+    family_admin: bool
+    member: User
+
+    class Config:
+        orm_mode = True
 
 class Family(FamilyBase):
     family_id: int
-    members: List[FamilyMember] = []
+    members: List[FamilyMemberOut] = []
     #members: List[User]
 
     class Config: 

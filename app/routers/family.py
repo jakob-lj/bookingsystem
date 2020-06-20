@@ -17,5 +17,5 @@ def get_all_families(db: Session = Depends(get_db)):
 @router.post('/')
 def create_family(family: FamilyIn, user: User = Depends(user.get_current_user), db: Session = Depends(get_db)):
     fam: Family = crud.create_family(db, family)
-    membership = crud.add_administrator_to_family(db, fam, user)
+    membership = crud.add_member_to_family(db, fam, user, admin=True)
     return fam

@@ -48,8 +48,8 @@ def create_family(db: Session, family: schemas.FamilyIn):
     db.refresh(db_item)
     return db_item
 
-def add_administrator_to_family(db: Session, family: schemas.Family, user: schemas.User):
-    db_item = models.FamilyMember(family=family, user=user)
+def add_member_to_family(db: Session, family: schemas.Family, user: schemas.User, admin=False):
+    db_item = models.FamilyMember(family=family, member=user, family_admin=admin)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
