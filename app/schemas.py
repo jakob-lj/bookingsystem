@@ -49,6 +49,8 @@ class Boat(BaseModel):
     class Config:
         orm_mode = True
 
+class BoatIn(BaseModel):
+    name: str
 
 class FamilyBase(BaseModel):
     name: str
