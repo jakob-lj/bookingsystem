@@ -41,9 +41,12 @@ class Family(Base):
     family_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, default="Surname")
     members = relationship("FamilyMember", back_populates="family")
+    boats = relationship("Boat", back_populates="family")
 
 class Boat(Base):
     __tablename__ = "boats"
 
     boat_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, default="")
+    family_id = Column(Integer, ForeignKey("family.family_id"))
+    family = relationship("Family", back_populates="boats")

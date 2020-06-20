@@ -42,6 +42,13 @@ class UserInFamily(UserBase):
     class Config:
         orm_mode = True
 
+class Boat(BaseModel):
+    boat_id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
 
 class FamilyBase(BaseModel):
     name: str
@@ -69,6 +76,7 @@ class FamilyMemberOut(BaseModel):
 class Family(FamilyBase):
     family_id: int
     members: List[FamilyMemberOut] = []
+    boats: List[Boat] = []
     #members: List[User]
 
     class Config: 
@@ -76,7 +84,3 @@ class Family(FamilyBase):
 
 class FamilyIn(FamilyBase):
     pass
-
-class Boat(BaseModel):
-    boat_id: int
-    name: str

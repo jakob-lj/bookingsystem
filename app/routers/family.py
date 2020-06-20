@@ -12,6 +12,8 @@ router = APIRouter()
 
 @router.get("/", response_model=List[Family])
 def get_all_families(db: Session = Depends(get_db)):
+    al = crud.get_all_families(db)
+    print(al[0].boats)
     return crud.get_all_families(db)
 
 @router.post('/')
