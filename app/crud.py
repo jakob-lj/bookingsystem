@@ -37,3 +37,20 @@ def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
     db.commit()
     db.refresh(db_item)
     return db_item
+
+def get_all_families(db: Session):
+    return db.query(models.Family).all()
+
+def create_family(db: Session, family: schemas.FamilyIn):
+    db_item = models.Family(**family.dict())
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+def add_administrator_to_family(db: Session, family: schemas.Family, user: schemas.User):
+    db_item = models.FamilyMember(family=family, user=user)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item

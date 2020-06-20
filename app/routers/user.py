@@ -1,17 +1,15 @@
 from typing import List
 from datetime import datetime, timedelta
-
+from sqlalchemy.orm import Session
 
 from fastapi import Depends, APIRouter, HTTPException, status
-from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from jwt import PyJWTError
 from passlib.context import CryptContext
 import jwt
 
-from . import crud, models, schemas
-from .database import SessionLocal, engine
+from app import crud, models, schemas
+from app.database import SessionLocal, engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -25,15 +23,6 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 216000
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token")
-
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 class Token(BaseModel):
