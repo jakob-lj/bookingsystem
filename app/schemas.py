@@ -31,7 +31,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     user_id: int
     is_active: bool
-    items: List[Item] = []
+    # items: List[Item] = []
 
     class Config:
         orm_mode = True
