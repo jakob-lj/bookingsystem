@@ -1,8 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from .database import Base
-
+from app.database import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -14,6 +13,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     items = relationship("Item", back_populates="owner")
+    #members = relationship("FamilyMember", back_populates="member")
 
 
 class Item(Base):

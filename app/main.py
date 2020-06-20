@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from .user import main as users
 from .boats import app as boats
+from .family import app as family
 
 
 
@@ -44,3 +45,4 @@ async def add_process_time_header(request: Request, call_next):
 
 app.include_router(users.router, prefix='/users')
 app.include_router(boats.router, prefix='/boats', tags=['boats'], dependencies=[Depends(users.get_current_user)])
+app.include_router(family.router, prefix='/families', tags=['families'], dependencies=[Depends(users.get_current_user)])

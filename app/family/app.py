@@ -16,7 +16,6 @@ def get_db():
     finally:
         db.close()
 
-
 @router.get('/')
-def get_all_boats(db: Session = Depends(get_db)):
-    return crud.get_boats(db)
+def get_all_families(db: Session = Depends(get_db)):
+    return crud.get_all_families(db)
