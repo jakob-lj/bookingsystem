@@ -78,7 +78,6 @@ class FamilyMemberOut(BaseModel):
 class Family(FamilyBase):
     family_id: int
     members: List[FamilyMemberOut] = []
-    boats: List[Boat] = []
     #members: List[User]
 
     class Config: 
@@ -86,3 +85,30 @@ class Family(FamilyBase):
 
 class FamilyIn(FamilyBase):
     pass
+
+class FamilyInProject(BaseModel):
+    family: Family
+
+    class Config:
+        orm_mode = True
+
+class ProjectAdmin(BaseModel):
+    user: User
+    
+    class Config:
+        orm_mode = True
+
+class ProjectBase(BaseModel):
+    name: str
+
+class ProjectIn(ProjectBase):
+    pass
+
+class Project(ProjectBase):
+    project_id: int
+    families: List[FamilyInProject]
+    boats: List[Boat] = []
+    admins: List[ProjectAdmin] = []
+
+    class Config:
+        orm_mode = True

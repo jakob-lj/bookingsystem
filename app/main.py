@@ -9,7 +9,7 @@ from jwt import PyJWTError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import user, family
+from .routers import user, family, project
 
 
 
@@ -44,3 +44,4 @@ async def add_process_time_header(request: Request, call_next):
 app.include_router(user.router, prefix='/users')
 #app.include_router(boats.router, prefix='/boats', tags=['boats'], dependencies=[Depends(users.get_current_user)])
 app.include_router(family.router, prefix='/family', tags=['families'], dependencies=[Depends(user.get_current_user)])
+app.include_router(project.router, prefix='/project', tags=['projects'])

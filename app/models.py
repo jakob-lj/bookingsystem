@@ -14,6 +14,7 @@ class User(Base):
 
     items = relationship("Item", back_populates="owner")
     family = relationship("FamilyMember", back_populates="member")
+    admin_projects = relationship("ProjectAdmin", back_populates="user")
 
 class Item(Base):
     __tablename__ = "items"
@@ -35,18 +36,44 @@ class FamilyMember(Base):
     family = relationship("Family", back_populates="members")
     member = relationship("User", back_populates="family")
 
+class FamilyInProject(Base):
+    __tablename__ = "projecthasfamily"
+
+    family_id = Column(Integer, ForeignKey("family.family_id"), primary_key=True)
+    project_id = Column(Integer, ForeignKey("projects.project_id"), primary_key = True)
+    family = relationship("Family", back_populates="projects")
+    project = relationship("Project", back_populates="families")
+
 class Family(Base):
     __tablename__ = "family"
     
     family_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, default="Surname")
     members = relationship("FamilyMember", back_populates="family")
-    boats = relationship("Boat", back_populates="family")
+    projects = relationship("FamilyInProject", back_populates="family")
 
 class Boat(Base):
     __tablename__ = "boats"
 
     boat_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, default="")
-    family_id = Column(Integer, ForeignKey("family.family_id"))
-    family = relationship("Family", back_populates="boats")
+    project_id = Column(Integer, ForeignKey("projects.project_id"))
+    project = relationship("Project", back_populates="boats")
+
+class Project(Base):
+    __tablename__ = "projects"
+
+    name = Column(String)
+    project_id = Column(Integer, primary_key = True, index = True)
+    families = relationship("FamilyInProject", back_populates="project")
+    boats = relationship("Boat", back_populates="project")
+    admins = relationship("ProjectAdmin", back_populates="project")
+    
+
+class ProjectAdmin(Base):
+    __tablename__ = "projecthasadmin"
+
+    project_id = Column(Integer, ForeignKey("projects.project_id"), primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"), primary_key=True, index=True)
+    project = relationship("Project", back_populates="admins")
+    user = relationship("User", back_populates="admin_projects")
