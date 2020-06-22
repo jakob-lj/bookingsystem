@@ -3,19 +3,27 @@
 import React, {useEffect, useState} from 'react'
 import {get} from './../Network/client'
 import {Link} from 'react-router-dom'
+import NetworkIssue from './../ErrorHandling/NetworkIssue'
 
 const Home = (props) => {
     const [projects, setProjects] = useState(undefined)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         get('/project/').then(r => r.json()).then(r => {
             setProjects(r)
+        }).catch(err => {
+            setError(err)
         })
     }, [])
 
 
-    if (projects === undefined) {
+    if (projects === undefined && !error) {
         return <div>Loading...</div>
+    }
+
+    if (error) {
+        return <NetworkIssue error={error} />
     }
 
     let projectElements = projects.map(p => {
@@ -23,6 +31,7 @@ const Home = (props) => {
             <h2>{p.name}</h2>
         </Link>
     })
+
 
     return <div>
         {projectElements}

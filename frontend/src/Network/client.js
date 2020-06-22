@@ -11,6 +11,11 @@ export const get = (endpoint, authenticated = true) => {
     }
     return fetch(url, {
         headers: headers
+    }).then(r => {
+        if (r.status > 399) {
+            throw new Error(r.status)
+        }
+        return r
     })
     
 }

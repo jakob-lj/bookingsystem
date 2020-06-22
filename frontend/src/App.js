@@ -7,6 +7,7 @@ import Home from './pages/Home'
 
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 import ProjectDetail from './pages/ProjectDetail';
+import NetworkIssue from './ErrorHandling/NetworkIssue'
 
 function App() {
   return (
