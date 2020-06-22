@@ -6,7 +6,7 @@ import Container from './components/Container'
 import Home, {CreateNewProject} from './pages/Home'
 
 import {BrowserRouter as Router, Route} from 'react-router-dom'
-import ProjectDetail from './pages/ProjectDetail';
+import ProjectDetail, { CreateNewBoat } from './pages/ProjectDetail';
 import NetworkIssue from './ErrorHandling/NetworkIssue'
 import LoginView from './pages/Login';
 import Logout from './pages/Logout';
@@ -34,6 +34,7 @@ function AppLayer() {
     <Route path={'/app/createNew'} exact component={Home} />
     <Route path={'/app/createNew'} exact component={CreateNewProject} />
     <Route path={'/app/project/:project_id'} component={ProjectDetail} />
+    <Route path={'/app/project/:project_id/createNewBoat'} component={CreateNewBoat} />
   </div>
 }
 

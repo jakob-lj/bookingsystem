@@ -88,6 +88,18 @@ def create_new_boat_in_family(db: Session, boat: schemas.BoatIn, family_id: int)
     db.refresh(db_item)
     return db_item
 
+def check_that_user_is_admin(db: Session, project_id: int, user: schemas.User):
+    projectAdmin = db.query(models.ProjectAdmin).filter(models.ProjectAdmin.project_id == project_id, models.ProjectAdmin.user_id == user.user_id).all()
+    if (len(projectAdmin) != 1):
+        raise notAuthrizedException
+
+def create_new_boat_in_project(db: Session, boat: schemas.BoatIn, project_id: int, current_user: schemas.User):
+    db_item = models.Boat(name = boat.name, project_id = project_id)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
 
 def create_new_project(db: Session, currentUser: schemas.User, project: schemas.ProjectIn):
     db_item = models.Project(**project.dict())

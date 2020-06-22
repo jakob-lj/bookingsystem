@@ -37,3 +37,8 @@ def create_new_project(project: ProjectIn, db: Session = Depends(get_db), curren
 @router.get('/{project_id}/', response_model=Project)
 def get_project_by_id(project_id: int, db: Session = Depends(get_db), current_user = Depends(user.get_current_user)):
     return crud.get_project_by_id(db, current_user, project_id)
+
+@router.post('/{project_id}/boats/', response_model=Boat)
+def create_new_boat_in_project(project_id: int, boat: BoatIn, db: Session=Depends(get_db), current_user = Depends(user.get_current_user)):
+    crud.check_that_user_is_admin(db, project_id, current_user)
+    return crud.create_new_boat_in_project(db, boat, project_id, current_user)

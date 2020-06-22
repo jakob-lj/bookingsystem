@@ -2,18 +2,20 @@
 
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
-import { get } from '../Network/client'
+import { get, post } from '../Network/client'
 import NetworkIssue from './../ErrorHandling/NetworkIssue'
 import {getId} from './../api/api'
+import Modal from '../components/Modal'
+import {Link} from 'react-router-dom'
 const Title = styled.h1`
     color: green;
 `
 
-const AdminButtons = () => {
+const AdminButtons = ({project_id}) => {
     return <div>
-        <button>Legg til administrator</button>
-        <button>Legg til ny båt</button>
-        <button>Legg til gruppe</button>
+        <Link>Legg til administrator</Link>
+        <Link to={`/app/project/${project_id}/createNewBoat`}>Legg til ny båt</Link>
+        <Link>Legg til gruppe</Link>
     </div>
 }
 
@@ -66,7 +68,7 @@ const ProjectDetail = ({match}) => {
     })
     
     return <div>
-        {isAdmin && <AdminButtons />}
+        {isAdmin && <AdminButtons project_id={project_id} />}
         <Title>{project.name}</Title>
         {boatObjects}
     </div>
@@ -74,3 +76,21 @@ const ProjectDetail = ({match}) => {
 }
 
 export default ProjectDetail
+
+export const CreateNewBoat = (props) => {
+    const [loading, setLoading] = useState(false)
+    const [name, setName] = useState('')
+
+    let project_id = props.match.params.project_id
+
+    const save = () => {
+        post(`/project/${project_id}/boats/`, {name}).then(r => {
+            console.log(r)
+        })
+    }
+
+    return <Modal loading={loading} title={'Legg til ny båt'} close={() => props.history.push(`/app/project/${project_id}`)} >
+        <input type={'text'} value={name} onChange={(e) => setName(e.target.value)} />
+        <button onClick={save}>Lagre</button>
+   </Modal>
+}
