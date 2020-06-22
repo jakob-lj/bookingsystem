@@ -6,6 +6,15 @@ import styled from 'styled-components'
 const HeaderDiv = styled.div`
     
     background-color: #555;
+    text-decoration: none;
+`
+
+const LogOutText = styled(Link)`
+    color: white;
+    text-decoration: none;
+    position: absolute;
+    right: 1em;
+    top: 1em;
 `
 
 const Title = styled.h1`
@@ -16,7 +25,8 @@ const Title = styled.h1`
 
 const Header = (props) => {
     return <HeaderDiv>
-        <Link to={'/'}><Title>BB</Title></Link>
+        <Link to={'/app'}><Title>BB</Title></Link>
+        <LogOutText to={'/logout'}>Log out</LogOutText>
     </HeaderDiv>
 }
 

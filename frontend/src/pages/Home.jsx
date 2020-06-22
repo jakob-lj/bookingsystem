@@ -27,7 +27,7 @@ const Home = (props) => {
     }
 
     let projectElements = projects.map(p => {
-        return <Link key={p.project_id} to={`/project/${p.project_id}/`}>
+        return <Link key={p.project_id} to={`/app/project/${p.project_id}/`}>
             <h2>{p.name}</h2>
         </Link>
     })

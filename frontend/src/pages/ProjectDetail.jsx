@@ -11,6 +11,7 @@ const Title = styled.h1`
 const ProjectDetail = ({match}) => {
 
     const [project, setProject] = useState(undefined)
+    const [isAdmin, setAdmin] = useState(false)
     const [error, setError] = useState(null)
 
     let project_id = match.params.project_id
@@ -18,6 +19,7 @@ const ProjectDetail = ({match}) => {
     useEffect(() => {
 
         get(`/project/${project_id}/`).then(r => r.json()).then(r => {
+            
             setProject(r)
         }).catch(err => {
             setError(err)
@@ -30,7 +32,7 @@ const ProjectDetail = ({match}) => {
             loading...
         </div>
     }
-    
+
     if (error) {
         return <NetworkIssue error={error} />
     }
