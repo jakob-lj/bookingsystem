@@ -31,6 +31,7 @@ const LoginView = (props) => {
             setRedirect(true)
             return r
         }).catch(err => {
+            console.log(err)
             setLoading(false)
             setError(true)
         })
@@ -50,7 +51,6 @@ const LoginView = (props) => {
     if (error) {
         errorText = <div>Feil brukernavn eller passord</div>
     }
-    console.log('div')
 
     return <div>
         {errorText}

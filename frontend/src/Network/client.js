@@ -1,12 +1,16 @@
 
 import settings from './../config'
 
+const getToken = () => {
+    return localStorage.getItem('accessToken')
+}
+
 export const get = (endpoint, authenticated = true) => {
     const url = settings.API_URL + endpoint
     let headers = {}
     if (authenticated) {
         headers = {
-            'Authorization': `Bearer ${settings.token}`
+            'Authorization': `Bearer ${getToken()}`
         }
     }
     return fetch(url, {
