@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Header from './components/Header'
 import Container from './components/Container'
-import Home from './pages/Home'
+import Home, {CreateNewProject} from './pages/Home'
 
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 import ProjectDetail from './pages/ProjectDetail';
@@ -31,6 +31,8 @@ function App() {
 function AppLayer() {
   return <div>
     <Route path={'/app'} exact component={Home} />
+    <Route path={'/app/createNew'} exact component={Home} />
+    <Route path={'/app/createNew'} exact component={CreateNewProject} />
     <Route path={'/app/project/:project_id'} component={ProjectDetail} />
   </div>
 }
