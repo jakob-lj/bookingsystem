@@ -53,6 +53,9 @@ def get_all_families_for_user(db: Session, user: schemas.User):
 def get_all_projects(db: Session, user: schemas.User):
     return db.query(models.Project).all()
 
+def get_project_by_id(db: Session, user: schemas.User, project_id: int):
+    return db.query(models.Project).filter(models.Project.project_id == project_id).first()
+
 def get_all_projects_where_user_is_admin(db: Session, user: schemas.User):
     return db.query(models.Project).filter(models.Project.project_id == models.ProjectAdmin.project_id, models.ProjectAdmin.user_id == user.user_id).all()
 

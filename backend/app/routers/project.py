@@ -33,3 +33,7 @@ def create_new_project(project: ProjectIn, db: Session = Depends(get_db), curren
     new_project = crud.create_new_project(db, current_user, project)
     adminAdd = crud.add_administrator_to_project(db, current_user, new_project)
     return {'ok':True}
+
+@router.get('/{project_id}/', response_model=Project)
+def get_project_by_id(project_id: int, db: Session = Depends(get_db), current_user = Depends(user.get_current_user)):
+    return crud.get_project_by_id(db, current_user, project_id)
