@@ -5,6 +5,8 @@ import {get, post} from './../Network/client'
 import {Link} from 'react-router-dom'
 import NetworkIssue from './../ErrorHandling/NetworkIssue'
 import Modal from './../components/Modal'
+import settings from './../config'
+import {getTypeFromProject} from './../lang/types'
 
 const Home = (props) => {
     const [projects, setProjects] = useState(undefined)
@@ -30,7 +32,7 @@ const Home = (props) => {
     let projectElements = projects.map(p => {
         return <Link key={p.project_id} to={`/app/project/${p.project_id}/`}>
             <h2>{p.name}</h2>
-            <p>{p.boats.length} båter</p>
+            <p>{p.objects.length} {getTypeFromProject(p)}</p>
             <p>{p.admins.length} administratorer</p>
         </Link>
     })
@@ -47,17 +49,28 @@ export default Home
 export const CreateNewProject = (props) => {
     const [name, setName] = useState('')
     const [loading, setLoading] = useState(false)
+    const [error, setErr] = useState(undefined)
+    const [projectType, setProjectType] = useState('')
 
     const save = () => {
         setLoading(true)
-        post('/project/', {name}).then(r => {
+        post('/project/', {name, project_type: projectType}).then(r => {
             setLoading(false)
             props.history.push('/app')
+        }).catch(err => {
+            setErr(err)
+            console.log(err)
         })
     }
 
-    return <Modal loading={loading} title={'Lag nytt prosjekt'} close={() => props.history.push('/app')}>
-        <input type={'text'} value={name} onChange={(e) => setName(e.target.value)} />
+    return <Modal error={error} loading={loading} title={'Lag nytt prosjekt'} close={() => props.history.push('/app')}>
+        <input placeholder={'Navn'} type={'text'} value={name} onChange={(e) => setName(e.target.value)} />
+        <select value={projectType} onChange={(e) => setProjectType(e.target.value)}>
+            <option value={''}></option>
+            <option value={settings.projectTypes.BOATS}>Båter</option>
+            <option value={settings.projectTypes.CARS}>Biler</option>
+            <option value={settings.projectTypes.OTHERS}>Andre</option>
+        </select>
         <button onClick={save}>Lagre</button>
     </Modal>
 }

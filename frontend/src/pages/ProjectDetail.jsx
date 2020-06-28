@@ -7,22 +7,24 @@ import NetworkIssue from './../ErrorHandling/NetworkIssue'
 import {getId} from './../api/api'
 import Modal from '../components/Modal'
 import {Link} from 'react-router-dom'
+import lang from './../lang/types'
+
 const Title = styled.h1`
     color: green;
 `
 
-const AdminButtons = ({project_id}) => {
+const AdminButtons = ({project_id, type}) => {
     return <div>
-        <Link>Legg til administrator</Link>
-        <Link to={`/app/project/${project_id}/createNewBoat`}>Legg til ny båt</Link>
-        <Link>Legg til gruppe</Link>
+        <Link to={'/'}>Legg til administrator</Link>
+        <Link to={`/app/project/${project_id}/createNewBoat`}>Legg til ny {lang[type]['typeName']['one']}</Link>
+        <Link to={'/'}>Legg til gruppe</Link>
     </div>
 }
 
 const ProjectDetail = ({match}) => {
 
     const [project, setProject] = useState(undefined)
-    const [boats, setBoats] = useState(undefined)
+    const [objects, setObjects] = useState(undefined)
     const [isAdmin, setAdmin] = useState(false)
     const [error, setError] = useState(null)
 
@@ -36,13 +38,12 @@ const ProjectDetail = ({match}) => {
             for (var i = 0; i < admins.length; i++) {
                 let adminId = admins[i].user.user_id
                 if (adminId === getId()) {
-                    console.log('is true')
                     isAdmin = true
                     break
                 }
             }
-            let bs = r.boats
-            setBoats(bs)
+            let bs = r.objects
+            setObjects(bs)
             setAdmin(isAdmin)
             setProject(r)
         }).catch(err => {
@@ -51,7 +52,7 @@ const ProjectDetail = ({match}) => {
 
     }, [project_id])
 
-    if ((project === undefined || boats === undefined) && !error) {
+    if ((project === undefined || objects === undefined) && !error) {
         return <div>
             loading...
         </div>
@@ -61,14 +62,14 @@ const ProjectDetail = ({match}) => {
         return <NetworkIssue error={error} />
     }
 
-    let boatObjects = boats.map(boat => {
-        return <div key={'boat'+boat.boat_id}>
-            {boat.name}
+    let boatObjects = objects.map(object => {
+        return <div key={'object'+object.object_id}>
+            {object.name}
         </div>
     })
     
     return <div>
-        {isAdmin && <AdminButtons project_id={project_id} />}
+        {isAdmin && <AdminButtons project_id={project_id} type={project.project_type} />}
         <Title>{project.name}</Title>
         {boatObjects}
     </div>
@@ -78,18 +79,33 @@ const ProjectDetail = ({match}) => {
 export default ProjectDetail
 
 export const CreateNewBoat = (props) => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [name, setName] = useState('')
+    const [error, setError] = useState(false)
+    const [project_type, setProjectType] = useState('other')
 
     let project_id = props.match.params.project_id
+    let history = props.history
+
+    useEffect(() => {
+        get(`/project/${project_id}/type/`).then(r => r.json()).then(r => {
+            setProjectType(r.type)
+            setLoading(false)
+        })
+    }, [project_id])
 
     const save = () => {
-        post(`/project/${project_id}/boats/`, {name}).then(r => {
-            console.log(r)
+        setLoading(true)
+        post(`/project/${project_id}/objects/`, {name}).then(r => {
+            //history.push(`/app/project/${project_id}/`)
+            window.location.href= `/app/project/${project_id}`
+        }).catch(err => {
+            console.log(err)
+            setError(err)
         })
     }
 
-    return <Modal loading={loading} title={'Legg til ny båt'} close={() => props.history.push(`/app/project/${project_id}`)} >
+    return <Modal error={error} loading={loading} title={`Legg til ny ${lang[project_type]['typeName']['one']}`} close={() => props.history.push(`/app/project/${project_id}`)} >
         <input type={'text'} value={name} onChange={(e) => setName(e.target.value)} />
         <button onClick={save}>Lagre</button>
    </Modal>

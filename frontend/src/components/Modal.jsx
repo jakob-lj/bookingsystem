@@ -40,10 +40,29 @@ color: gray;
 
 const Modal = (props) => {
     
-    if (props.loading) {
+    if (props.loading && !props.error) {
         return <Wrapper>
             <Content>
-                Loading...
+                <Header>
+                    <Title>Loading...</Title>
+                </Header>
+                <Body>
+                    <p>Sender informasjon til serverene. Straks tilbake!</p>
+                </Body>
+            </Content>
+        </Wrapper>
+    }
+
+    if (props.error) {
+        return <Wrapper>
+            <Content>
+                <Header>
+                    <Title>Det skjedde en feil</Title>
+                </Header>
+                <Body>
+                    <p>Det kan virke som vi ikke får kontakt med serverene. Vennligst prøv igjen om litt.</p>
+                    <button onClick={props.close} >Lukk</button>
+                </Body>
             </Content>
         </Wrapper>
     }
