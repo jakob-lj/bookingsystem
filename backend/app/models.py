@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -52,13 +52,13 @@ class Family(Base):
     members = relationship("FamilyMember", back_populates="family")
     projects = relationship("FamilyInProject", back_populates="family")
 
-class Boat(Base):
-    __tablename__ = "boats"
+class ProjectObject(Base):
+    __tablename__ = "objects"
 
-    boat_id = Column(Integer, primary_key=True, index=True)
+    object_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, default="")
     project_id = Column(Integer, ForeignKey("projects.project_id"))
-    project = relationship("Project", back_populates="boats")
+    project = relationship("Project", back_populates="objects")
 
 class Project(Base):
     __tablename__ = "projects"
@@ -66,8 +66,9 @@ class Project(Base):
     name = Column(String)
     project_id = Column(Integer, primary_key = True, index = True)
     families = relationship("FamilyInProject", back_populates="project")
-    boats = relationship("Boat", back_populates="project")
+    objects = relationship("ProjectObject", back_populates="project")
     admins = relationship("ProjectAdmin", back_populates="project")
+    project_type = Column(Enum('boats', 'cars', 'other', name='project_type'))
     
 
 class ProjectAdmin(Base):

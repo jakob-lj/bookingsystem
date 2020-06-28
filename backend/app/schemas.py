@@ -1,6 +1,7 @@
 from typing import List
 
 from pydantic import BaseModel
+from enum import Enum
 
 class ItemBase(BaseModel):
     title: str
@@ -42,14 +43,14 @@ class UserInFamily(UserBase):
     class Config:
         orm_mode = True
 
-class Boat(BaseModel):
-    boat_id: int
+class ProjectObject(BaseModel):
+    object_id: int
     name: str
 
     class Config:
         orm_mode = True
 
-class BoatIn(BaseModel):
+class ProjectObjectIn(BaseModel):
     name: str
 
 class FamilyBase(BaseModel):
@@ -98,8 +99,14 @@ class ProjectAdmin(BaseModel):
     class Config:
         orm_mode = True
 
+class ProjectType(str, Enum):
+    boats = "boats"
+    cars = "cars"
+    other = "other"
+
 class ProjectBase(BaseModel):
     name: str
+    project_type: ProjectType
 
 class ProjectIn(ProjectBase):
     pass
@@ -107,7 +114,7 @@ class ProjectIn(ProjectBase):
 class Project(ProjectBase):
     project_id: int
     families: List[FamilyInProject]
-    boats: List[Boat] = []
+    objects: List[ProjectObject] = []
     admins: List[ProjectAdmin] = []
 
     class Config:

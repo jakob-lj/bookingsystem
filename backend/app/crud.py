@@ -81,7 +81,7 @@ def check_if_user_in_family_and_admin(db: Session, user: schemas.User, family_id
     if (len(familyAdmin) != 1):
         raise notAuthrizedException
 
-def create_new_boat_in_family(db: Session, boat: schemas.BoatIn, family_id: int):
+def create_new_boat_in_family(db: Session, boat: schemas.ProjectObjectIn, family_id: int):
     db_item = models.Boat(name = boat.name, family_id = family_id)
     db.add(db_item)
     db.commit()
@@ -93,8 +93,8 @@ def check_that_user_is_admin(db: Session, project_id: int, user: schemas.User):
     if (len(projectAdmin) != 1):
         raise notAuthrizedException
 
-def create_new_boat_in_project(db: Session, boat: schemas.BoatIn, project_id: int, current_user: schemas.User):
-    db_item = models.Boat(name = boat.name, project_id = project_id)
+def create_new_project_object_in_project(db: Session, obj: schemas.ProjectObjectIn, project_id: int, current_user: schemas.User):
+    db_item = models.ProjectObject(name = obj.name, project_id = project_id)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)

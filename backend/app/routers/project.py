@@ -5,7 +5,7 @@ from fastapi import Depends, APIRouter, HTTPException, status
 from app.database import get_db
 from app import crud
 from sqlalchemy.orm import Session
-from app.schemas import FamilyIn, Family, User, BoatIn, Boat, Project, ProjectIn
+from app.schemas import FamilyIn, Family, User, ProjectObject, ProjectObjectIn, Project, ProjectIn
 from app.routers import user
 
 router = APIRouter()
@@ -38,7 +38,13 @@ def create_new_project(project: ProjectIn, db: Session = Depends(get_db), curren
 def get_project_by_id(project_id: int, db: Session = Depends(get_db), current_user = Depends(user.get_current_user)):
     return crud.get_project_by_id(db, current_user, project_id)
 
-@router.post('/{project_id}/boats/', response_model=Boat)
-def create_new_boat_in_project(project_id: int, boat: BoatIn, db: Session=Depends(get_db), current_user = Depends(user.get_current_user)):
+@router.get('/{project_id}/type/')
+def get_project_type(project_id: int, db:Session = Depends(get_db), current_user = Depends(user.get_current_user)):
+    project = crud.get_project_by_id(db, current_user, project_id)
+    
+    return {'type': project.project_type}
+
+@router.post('/{project_id}/objects/', response_model=ProjectObject)
+def create_new_project_object_in_project(project_id: int, obj: ProjectObjectIn, db: Session=Depends(get_db), current_user = Depends(user.get_current_user)):
     crud.check_that_user_is_admin(db, project_id, current_user)
-    return crud.create_new_boat_in_project(db, boat, project_id, current_user)
+    return crud.create_new_project_object_in_project(db, obj, project_id, current_user)

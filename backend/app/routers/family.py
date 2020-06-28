@@ -5,7 +5,7 @@ from fastapi import Depends, APIRouter, HTTPException, status
 from app.database import get_db
 from app import crud
 from sqlalchemy.orm import Session
-from app.schemas import FamilyIn, Family, User, BoatIn, Boat
+from app.schemas import FamilyIn, Family, User, ProjectObjectIn, ProjectObject
 from app.routers import user
 
 router = APIRouter()
@@ -20,9 +20,9 @@ def create_family(family: FamilyIn, user: User = Depends(user.get_current_user),
     membership = crud.add_member_to_family(db, fam, user, admin=True)
     return {'ok': True}
 
-@router.post('/{family_id}/boats', response_model=Boat)
-def create_boat_in_family(family_id: int, boat: BoatIn, user: User = Depends(user.get_current_user), db: Session = Depends(get_db)):
+@router.post('/{family_id}/boats', response_model=ProjectObject)
+def create_boat_in_family(family_id: int, obj: ProjectObjectIn, user: User = Depends(user.get_current_user), db: Session = Depends(get_db)):
     
     crud.check_if_user_in_family_and_admin(db, user, family_id) # will rais 401 if not authorized
-    return crud.create_new_boat_in_family(db, boat, family_id)
+    return crud.create_new_boat_in_family(db, obj, family_id)
 
